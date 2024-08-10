@@ -1,53 +1,44 @@
-const productManager = require('../models/productManager');
+const productManager = require('../models/productManager'); // Asegúrate de tener esta importación
+const io = require('../index').io; 
 
-exports.getAll = async (req, res) => {
-  try {
-    const products = await productManager.getAll();
-    res.json(products);
-  } catch (error) {
-    res.status(500).send('Server error');
-  }
-};
+class ProductController {
+    async getAll(req, res) {
+        const products = await productManager.getAll();
+        res.json(products);
+    }
 
-exports.getById = async (req, res) => {
-  try {
-    const { pid } = req.params;
-    const product = await productManager.getById(Number(pid));
-    if (!product) return res.status(404).send('Product not found');
-    res.json(product);
-  } catch (error) {
-    res.status(500).send('Server error');
-  }
-};
+    async getById(req, res) {
+        const productId = req.params.pid;
+        const product = await productManager.getById(productId);
+        if (product) {
+            res.json(product);
+        } else {
+            res.status(404).send({ error: 'Producto no encontrado' });
+        }
+    }
 
-exports.add = async (req, res) => {
-  try {
-    const newProduct = req.body;
-    const addedProduct = await productManager.add(newProduct);
-    res.status(201).json(addedProduct);
-  } catch (error) {
-    res.status(500).send('Server error');
-  }
-};
+    async add(req, res) {
+        const product = await productManager.add(req.body);
+        io.emit('product-added', product); // Emitir evento
+        res.json(product);
+    }
 
-exports.update = async (req, res) => {
-  try {
-    const { pid } = req.params;
-    const updatedProduct = await productManager.update(Number(pid), req.body);
-    if (!updatedProduct) return res.status(404).send('Product not found');
-    res.json(updatedProduct);
-  } catch (error) {
-    res.status(500).send('Server error');
-  }
-};
+    async update(req, res) {
+        const productId = req.params.pid;
+        const updatedProduct = await productManager.update(productId, req.body);
+        if (updatedProduct) {
+            res.json(updatedProduct);
+        } else {
+            res.status(404).send({ error: 'Producto no encontrado' });
+        }
+    }
 
-exports.delete = async (req, res) => {
-  try {
-    const { pid } = req.params;
-    const deletedProduct = await productManager.delete(Number(pid));
-    if (!deletedProduct) return res.status(404).send('Product not found');
-    res.json(deletedProduct);
-  } catch (error) {
-    res.status(500).send('Server error');
-  }
-};
+    async delete(req, res) {
+        const productId = req.params.pid;
+        await productManager.delete(productId);
+        io.emit('product-deleted', productId); // Emitir evento
+        res.status(204).send();
+    }
+}
+
+module.exports = new ProductController();

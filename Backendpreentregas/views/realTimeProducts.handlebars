@@ -1,0 +1,39 @@
+<!-- views/realTimeProducts.handlebars -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Productos en Tiempo Real</title>
+</head>
+<body>
+    <h1>Productos en Tiempo Real</h1>
+    <ul id="products-list">
+        {{#each products}}
+            <li>{{this.title}} - {{this.price}} <button onclick="deleteProduct('{{this.id}}')">Eliminar</button></li>
+        {{/each}}
+    </ul>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io();
+
+        socket.on('product-added', product => {
+            const list = document.getElementById('products-list');
+            const item = document.createElement('li');
+            item.innerHTML = `${product.title} - ${product.price} <button onclick="deleteProduct('${product.id}')">Eliminar</button>`;
+            list.appendChild(item);
+        });
+
+        socket.on('product-deleted', productId => {
+            const item = document.querySelector(`[data-id="${productId}"]`);
+            if (item) {
+                item.remove();
+            }
+        });
+
+        function deleteProduct(productId) {
+            socket.emit('delete-product', productId);
+        }
+    </script>
+</body>
+</html>
