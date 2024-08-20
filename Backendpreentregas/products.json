@@ -20,5 +20,39 @@
     "stock": 20,
     "category": "Categoría 2",
     "thumbnails": ["ruta3.jpg", "ruta4.jpg"]
+  },
+  {
+    "id": 3,
+    "title": "Buzo 1",
+    "description": "Buzo cómodo y abrigado",
+    "code": "PROD3",
+    "price": 3500,
+    "status": true,
+    "stock": 15,
+    "category": "Buzos",
+    "thumbnails": ["buzo1_ruta1.jpg", "buzo1_ruta2.jpg"]
+  },
+  {
+    "id": 4,
+    "title": "Buzo 2",
+    "description": "Buzo con capucha, ideal para el invierno",
+    "code": "PROD4",
+    "price": 3800,
+    "status": true,
+    "stock": 10,
+    "category": "Buzos",
+    "thumbnails": ["buzo2_ruta1.jpg", "buzo2_ruta2.jpg"]
+  },
+  {
+    "id": 5,
+    "title": "Championes 1",
+    "description": "Championes deportivos, cómodos y ligeros",
+    "code": "PROD5",
+    "price": 4500,
+    "status": true,
+    "stock": 25,
+    "category": "Championes",
+    "thumbnails": ["championes1_ruta1.jpg", "championes1_ruta2.jpg"]
   }
+  
 ]
