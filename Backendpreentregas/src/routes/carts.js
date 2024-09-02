@@ -1,21 +1,19 @@
 const express = require("express");
 const router = express.Router();
 const cartController = require("../controllers/cartController");
-const productController = require("../controllers/productController");
 
-router.post("/", cartController.add);
-router.get("/:cid", cartController.getById);
-router.post("/:cid/product/:pid", cartController.addProduct);
+// Agregar las siguientes rutas:
 
-router.get("/realtime", async (req, res) => {
-  try {
-    const products = await productController.getAll();
-    console.log(products); // Para verificar que products no es undefined o null
-    res.render("realTimeProducts", { products });
-  } catch (error) {
-    console.error("Error fetching products:", error);
-    res.status(500).send("Internal Server Error");
-  }
-});
+// Eliminar un producto específico de un carrito
+router.delete("/:cid/products/:pid", cartController.deleteProduct);
+
+// Actualizar todos los productos de un carrito con un arreglo de productos
+router.put("/:cid/products", cartController.updateAllProducts);
+
+// Actualizar la cantidad de un producto específico en el carrito
+router.put("/:cid/products/:pid", cartController.updateProductQuantity);
+
+// Eliminar todos los productos del carrito
+router.delete("/:cid", cartController.deleteAllProducts);
 
 module.exports = router;
